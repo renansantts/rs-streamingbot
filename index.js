@@ -8,8 +8,8 @@ const BOT_TOKEN = process.env.BOT_TOKEN
 const ADMIN_ID = String(process.env.ADMIN_ID || '')
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || ''
 const PORT = process.env.PORT || 3000
-const START_IMAGE_URL = process.env.START_IMAGE_URL || 'https://i.imgur.com/0Z8FQvU.jpeg'
-const SUPPORT_GROUP_URL = process.env.SUPPORT_GROUP_URL || 'LINK_DO_GRUPO_AQUI'
+const START_IMAGE_URL = process.env.START_IMAGE_URL || 'https://i.ibb.co/fY5PQS1G/FOTO-DE-PERFIL-RS-STREAMING.jpg'
+const SUPPORT_GROUP_URL = process.env.SUPPORT_GROUP_URL || 'https://chat.whatsapp.com/IuOQb614sFoEuPW6CNz6wX'
 const CONTACT_URL = process.env.CONTACT_URL || 'https://t.me/SEU_USUARIO'
 const STORE_NAME = process.env.STORE_NAME || 'RS STREAMING'
 const DB_FILE = './database.json'
@@ -126,7 +126,7 @@ async function sendHome(ctx) {
   const text = `😍 Bem-vindo à melhor loja de streamings do Telegram! ✨\n🎬 Logins rápidos, seguros e pelo melhor preço!\n\n‼️ Não encontrou o login que procura?\nEntre em contato com nosso suporte, estamos à disposição para te ajudar! 😊\n\n📘 Seus Dados:\n🆔 ID: ${ctx.from.id}\n💰 Saldo Atual: ${money(user.balance)}\n🏆 Bônus De Indicação: R$ 0,00`
 
   try {
-    return await ctx.replyWithPhoto({ url: START_IMAGE_URL }, { caption: text, ...mainMenu() })
+    return await ctx.replyWithPhoto({ url: 'https://i.ibb.co/fY5PQS1G/FOTO-DE-PERFIL-RS-STREAMING.jpg' }, { caption: text, ...mainMenu() })
   } catch {
     return ctx.reply(text, mainMenu())
   }
@@ -203,10 +203,10 @@ bot.action(/buy_(.+)/, async (ctx) => {
   if (Number(user.balance) < Number(produto.price)) return ctx.reply(`❌ Saldo insuficiente.\n\n💰 Seu saldo: ${money(user.balance)}\n📦 Produto: ${produto.name}\n💵 Valor: ${money(produto.price)}`)
   const entrega = produto.stock.shift()
   registerSale(db, user, ctx, produto.name, produto.price, entrega)
-saveDB(db)
+  saveDB(db)
 
-await ctx.telegram.sendMessage(process.env.ADMIN_ID, 
-`🚨 NOVA VENDA REALIZADA
+  await ctx.telegram.sendMessage(process.env.ADMIN_ID,
+    `🚨 NOVA VENDA REALIZADA
 
 👤 Cliente: ${ctx.from.first_name || 'Cliente'}
 🆔 ID: ${ctx.from.id}
@@ -221,10 +221,40 @@ ${entrega.tela || ''}
 ${entrega.pin || ''}
 
 📅 Data: ${new Date().toLocaleString('pt-BR')}`
-)
-  return ctx.reply(`📦 COMPRA REALIZADA COM SUCESSO 📦\n\n🛒 Produto: ${produto.name}\n💰 Valor: ${money(produto.price)}\n📅 Data: ${new Date().toLocaleString('pt-BR')}\n⏳ Válido Até: ${new Date(Date.now() + 30 * 86400000).toLocaleDateString('pt-BR')}\n\n🔐 DADOS DE ACESSO\n${formatDelivery(entrega)}\n\n📱 REGRAS DE USO\n⚠️ Uso permitido em apenas 1 dispositivo\n⚠️ Não altere dados da conta\n⚠️ Não crie perfil na conta\n\n🛠️ SUPORTE\n${SUPPORT_GROUP_URL}\n\n💙 Obrigado pela preferência!\n${STORE_NAME} agradece sua compra 🤝`)
-})
+  )
 
+return ctx.reply(`📦 COMPRA REALIZADA COM SUCESSO 📦
+
+🛒 Produto: ${produto.name}
+💰 Valor: ${money(produto.price)}
+📅 Data da Compra: ${new Date().toLocaleString('pt-BR')}
+⏳ Válido Até: ${new Date(Date.now() + 30 * 86400000).toLocaleDateString('pt-BR')}
+
+━━━━━━━━━━━━━━━
+🔐 DADOS DE ACESSO
+
+📧 Login: ${entrega.email || ''}
+🔑 Senha: ${entrega.senha || ''}
+📺 Tela: ${entrega.tela || 'Acesso único'}
+⚠️ PIN: ${entrega.pin || 'Sem PIN'}
+
+━━━━━━━━━━━━━━━
+📱 REGRAS DE USO
+
+⚠️ Uso permitido em apenas 1 dispositivo
+⚠️ Não altere dados da conta
+⚠️ Não crie perfil na conta
+
+━━━━━━━━━━━━━━━
+🛠️ SUPORTE
+
+https://chat.whatsapp.com/IuOQb614sFoEuPW6CNz6wX
+
+━━━━━━━━━━━━━━━
+💙 Obrigado pela preferência!
+
+RS STREAMING agradece sua compra 🤝`)
+})
 bot.action(/qtd_(.+)/, async (ctx) => {
   try { await ctx.answerCbQuery() } catch { }
   const db = loadDB()
@@ -247,13 +277,55 @@ bot.hears(/^\d+$/, async (ctx, next) => {
   const total = Number(produto.price) * quantidade
   if (produto.stock.length < quantidade) return ctx.reply('❌ Estoque insuficiente.')
   if (user.balance < total) return ctx.reply('❌ Saldo insuficiente.')
-  let logins = ''
+  const dataCompra = new Date()
+  const validoAte = new Date(dataCompra.getTime() + 30 * 24 * 60 * 60 * 1000)
+
+  user.balance -= total
+
   for (let i = 0; i < quantidade; i++) {
     const login = produto.stock.shift()
+
     registerSale(db, user, ctx, produto.name, produto.price, login)
-    logins += `\n🔐 LOGIN ${i + 1}:\n${formatDelivery(login)}\n`
+
+    await ctx.reply(`📦 COMPRA REALIZADA COM SUCESSO 📦
+
+🛒 Produto: ${produto.name}
+💰 Valor: ${money(produto.price)}
+📅 Data da Compra: ${dataCompra.toLocaleString('pt-BR')}
+⏳ Válido Até: ${validoAte.toLocaleDateString('pt-BR')}
+
+━━━━━━━━━━━━━━━
+🔐 DADOS DE ACESSO
+
+📧 Login: ${login.email || login.login || ''}
+🔑 Senha: ${login.senha || login.password || ''}
+📺 Tela: ${login.tela || 'Acesso único'}
+⚠️ PIN: ${login.pin || 'Sem PIN'}
+
+━━━━━━━━━━━━━━━
+📱 REGRAS DE USO
+
+⚠️ Uso permitido em apenas 1 dispositivo
+⚠️ Não altere e nem remova os dados da conta
+⚠️ Não crie perfil na conta
+⚠️ Caso seja identificado mais de um aparelho, o acesso poderá ser removido sem aviso
+
+━━━━━━━━━━━━━━━
+🛠️ SUPORTE
+
+⏰ Atendimento de 24H até 48H
+📲 Grupo de suporte:
+https://chat.whatsapp.com/IuOQb614sFoEuPW6CNz6wX
+
+━━━━━━━━━━━━━━━
+💙 Obrigado pela preferência!
+A RS Streaming agradece sua compra 🤝`)
   }
+
   delete db.esperandoQtd[String(ctx.from.id)]
+  saveDB(db)
+
+  return ctx.reply(`💰 Saldo restante: ${money(user.balance)}`)
   saveDB(db)
   return ctx.reply(`✅ COMPRA REALIZADA\n\n📦 Produto: ${produto.name.toUpperCase()}\n${logins}\n💰 Saldo restante: ${money(user.balance)}`)
 })
@@ -322,7 +394,7 @@ bot.action('suporte', async (ctx) => {
 
 bot.action('alugar', async (ctx) => {
   try { await ctx.answerCbQuery() } catch { }
-  return ctx.reply(`🤖 QUER UM BOT DE VENDAS IGUAL A ESTE?\n\nAlugue seu próprio Bot de Vendas totalmente automatizado para Telegram.\n\n🛒 Loja automática\n💰 Recarga via PIX\n📦 Entrega automática\n👥 Sistema de afiliados\n🏆 Ranking\n🎁 Gift Cards\n📋 Painel ADM\n\n📞 Para contratar clique abaixo.`, Markup.inlineKeyboard([[Markup.button.url('📲 ENTRAR EM CONTATO', CONTACT_URL)], [Markup.button.callback('⬅️ Voltar', 'inicio')]]))
+  return ctx.reply(`🤖 QUER UM BOT DE VENDAS IGUAL A ESTE?\n\nAlugue seu próprio Bot de Vendas totalmente automatizado para Telegram.\n\n🛒 Loja automática\n💰 Recarga via PIX\n📦 Entrega automática\n👥 Sistema de afiliados\n🏆 Ranking\n🎁 Gift Cards\n📋 Painel ADM\n\n📞 Para contratar clique abaixo.`, Markup.inlineKeyboard([[Markup.button.url('📲 ENTRAR EM CONTATO', 'https://wa.me/5591992239663')], [Markup.button.callback('⬅️ Voltar', 'inicio')]]))
 })
 
 bot.action('ranking', async (ctx) => {
@@ -578,6 +650,7 @@ async function gerarPix(ctx, valor) {
         transaction_amount: Number(valor),
         description: `Recarga ${STORE_NAME}`,
         payment_method_id: 'pix',
+        notification_url: process.env.WEBHOOK_URL,
         external_reference: String(ctx.from.id),
         date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
         payer: { email: `cliente${ctx.from.id}@email.com` }
@@ -633,7 +706,7 @@ async function checkAndCreditPayment(paymentId, ctx = null) {
     localPayment.status = 'approved'
     saveDB(db)
     await bot.telegram.sendMessage(process.env.ADMIN_ID,
-`💰 NOVO DEPÓSITO
+      `💰 NOVO DEPÓSITO
 
 👤 Cliente: ${user.name || 'Cliente'}
 🆔 ID: ${localPayment.userId}
@@ -641,7 +714,7 @@ async function checkAndCreditPayment(paymentId, ctx = null) {
 💵 Valor: ${money(localPayment.amount)}
 
 📅 Data: ${new Date().toLocaleString('pt-BR')}`
-)
+    )
     const msg = `✅ Pagamento aprovado!\n💰 Saldo adicionado: ${money(localPayment.amount)}\n💳 Saldo atual: ${money(user.balance)}`
     if (ctx) await ctx.reply(msg)
     else await bot.telegram.sendMessage(localPayment.userId, msg)
