@@ -1,0 +1,87 @@
+{
+  "users": {
+    "5134426499": {
+      "id": "5134426499",
+      "name": "RS",
+      "username": "RS_STREAMING",
+      "balance": 0,
+      "purchases": [],
+      "totalDepositos": 0,
+      "totalCompras": 0,
+      "qtdCompras": 0,
+      "totalAtividades": 0
+    },
+    "8349130268": {
+      "id": "8349130268",
+      "name": "Rosa",
+      "username": "",
+      "balance": 49,
+      "purchases": [
+        {
+          "product": "HBO",
+          "price": 1,
+          "delivery": {
+            "email": "renanrstrean@gmail.com",
+            "senha": "Senha1245@@",
+            "tela": "Tela",
+            "pin": "PIN"
+          },
+          "date": "2026-05-29T13:38:08.988Z"
+        }
+      ],
+      "totalDepositos": 0,
+      "totalCompras": 1,
+      "qtdCompras": 1,
+      "totalAtividades": 1,
+      "totalGifts": 50,
+      "lastPurchaseDate": "Fri May 29 2026"
+    }
+  },
+  "products": [
+    {
+      "id": "1780061802781",
+      "name": "HBO",
+      "price": 1,
+      "stock": []
+    }
+  ],
+  "combos": [],
+  "payments": {
+    "160717720613": {
+      "userId": "8349130268",
+      "amount": 2,
+      "status": "pending"
+    },
+    "160716813713": {
+      "userId": "8349130268",
+      "amount": 2,
+      "status": "pending"
+    }
+  },
+  "sales": [
+    {
+      "userId": "8349130268",
+      "name": "Rosa",
+      "product": "HBO",
+      "price": 1,
+      "delivery": {
+        "email": "renanrstrean@gmail.com",
+        "senha": "Senha1245@@",
+        "tela": "Tela",
+        "pin": "PIN"
+      },
+      "date": "29/05/2026, 10:38:08"
+    }
+  ],
+  "gifts": [
+    {
+      "code": "RS50",
+      "value": 50,
+      "used": true,
+      "createdAt": "29/05/2026, 10:35:14",
+      "usedBy": "8349130268",
+      "usedAt": "29/05/2026, 10:36:07"
+    }
+  ],
+  "settings": {}
+}
