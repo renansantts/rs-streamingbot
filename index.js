@@ -123,7 +123,7 @@ function adminMenu() {
 async function sendHome(ctx) {
   const db = loadDB()
   const user = getUser(db, ctx.from.id, ctx)
-  const text = `😍 Bem-vindo à melhor loja de streamings do Telegram! ✨\n🎬 Logins rápidos, seguros e pelo melhor preço!\n\n‼️ Não encontrou o login que procura?\nEntre em contato com nosso suporte, estamos à disposição para te ajudar! 😊\n\n📘 Seus Dados:\n🆔 ID: ${ctx.from.id}\n💰 Saldo Atual: ${money(user.balance)}\n🏆 Bônus De Indicação: R$ 0,00`
+  const text = `😍 Bem-vindo à melhor loja de streamings do Telegram! ✨\n🎬 Logins rápidos, seguros e pelo melhor preço!\n\n‼️ Não encontrou o login que procura?\nEntre em contato com nosso suporte, estamos à disposição para te ajudar! 😊\n ⏳ Suporte disponível de 24h a 48h! 🕐 \n📘 Seus Dados:\n🆔 ID: ${ctx.from.id}\n💰 Saldo Atual: ${money(user.balance)}\n🏆 Bônus De Indicação: R$ 0,00`
 
   try {
     return await ctx.replyWithPhoto({ url: 'https://i.ibb.co/fY5PQS1G/FOTO-DE-PERFIL-RS-STREAMING.jpg' }, { caption: text, ...mainMenu() })
@@ -246,8 +246,8 @@ return ctx.reply(`📦 COMPRA REALIZADA COM SUCESSO 📦
 ⚠️ Não crie perfil na conta
 
 ━━━━━━━━━━━━━━━
-🛠️ SUPORTE
-
+🛠️ SUPORTE DISPONIVEL DE 24H A 48H! 🕐
+📲 Grupo de suporte:
 https://chat.whatsapp.com/IuOQb614sFoEuPW6CNz6wX
 
 ━━━━━━━━━━━━━━━
@@ -389,7 +389,7 @@ bot.action('perfil', async (ctx) => {
 
 bot.action('suporte', async (ctx) => {
   try { await ctx.answerCbQuery() } catch { }
-  return ctx.reply(`🛠 SUPORTE ${STORE_NAME}\n\n⏰ Atendimento: 24H\n\n📲 ENTRE NO GRUPO DE SUPORTE:\n${SUPPORT_GROUP_URL}\n\n⚠ Após entrar no grupo:\n• Marque o ADM\n• Envie seu problema\n• Envie print do erro`)
+  return ctx.reply(`🛠 SUPORTE ${STORE_NAME}\n\n⏰ Atendimento: 24H A 48H\n\n📲 ENTRE NO GRUPO DE SUPORTE:\n${SUPPORT_GROUP_URL}\n\n⚠ Após entrar no grupo:\n• Marque o ADM\n• Envie seu problema\n• Envie print do erro`)
 })
 
 bot.action('alugar', async (ctx) => {
@@ -626,7 +626,7 @@ bot.hears('📊 Estatísticas', (ctx) => {
   return ctx.reply(`📊 ESTATÍSTICAS\n\n📦 Produtos: ${db.products.length}\n🎁 Combos: ${db.combos.length}\n👤 Clientes: ${Object.keys(db.users).length}\n🛒 Vendas: ${db.sales.length}\n💰 Total vendido: ${money(totalVendido)}\n🎁 Gift Cards: ${db.gifts.length}`)
 })
 
-bot.hears('⚙️ Configurações', (ctx) => isAdmin(ctx) ? ctx.reply(`⚙️ CONFIGURAÇÕES\n\n🏪 Loja: ${STORE_NAME}\n💳 Pagamento: Mercado Pago\n🚀 Entrega: Automática\n🎁 Gift Card: Ativo\n🕒 Suporte: 24h`) : ctx.reply('❌ Sem permissão.'))
+bot.hears('⚙️ Configurações', (ctx) => isAdmin(ctx) ? ctx.reply(`⚙️ CONFIGURAÇÕES\n\n🏪 Loja: ${STORE_NAME}\n💳 Pagamento: Mercado Pago\n🚀 Entrega: Automática\n🎁 Gift Card: Ativo\n🕒 Suporte: 24h a 48h! 🕐`) : ctx.reply('❌ Sem permissão.'))
 bot.hears('🔙 Voltar', (ctx) => ctx.reply('🏠 Menu principal', mainMenu()))
 
 bot.action('saldo', async (ctx) => {
