@@ -384,7 +384,7 @@ bot.action('perfil', async (ctx) => {
   try { await ctx.answerCbQuery() } catch { }
   const db = loadDB()
   const user = getUser(db, ctx.from.id, ctx)
-  return ctx.reply(`✌️ OLÁ, ${STORE_NAME}!\nAqui estão os detalhes da sua conta:\n\n👤 DADOS DO USUÁRIO\n├ Nome: ${ctx.from.first_name || 'Cliente'}\n├ Username: @${ctx.from.username || 'semuser'}\n└ ID: ${ctx.from.id}\n\n💰 CARTEIRA\n├ Saldo disponível: ${money(user.balance)}\n├ Total recarregado (PIX): ${money(user.totalDepositos)}\n└ Total gasto em compras: ${money(user.totalCompras)}\n\n📈 RESUMO DE ATIVIDADES\n├ Total de compras: ${user.qtdCompras || 0}\n└ Gifts resgatados: ${money(user.totalGifts || 0)}\n\n🏆 AFILIADOS\n├ Pessoas indicadas: 0\n└ Seu link:\nLINK_DO_BOT_AQUI?start=${ctx.from.id}`, Markup.inlineKeyboard([[Markup.button.callback('↩️ Voltar', 'inicio')]]))
+  return ctx.reply(`✌️ OLÁ, ${STORE_NAME}!\nAqui estão os detalhes da sua conta:\n\n👤 DADOS DO USUÁRIO\n├ Nome: ${ctx.from.first_name || 'Cliente'}\n├ Username: @${ctx.from.username || 'semuser'}\n└ ID: ${ctx.from.id}\n\n💰 CARTEIRA\n├ Saldo disponível: ${money(user.balance)}\n├ Total recarregado (PIX): ${money(user.totalDepositos)}\n└ Total gasto em compras: ${money(user.totalCompras)}\n\n📈 RESUMO DE ATIVIDADES\n├ Total de compras: ${user.qtdCompras || 0}\n└ Gifts resgatados: ${money(user.totalGifts || 0)}\n\n🏆 AFILIADOS\n├ Pessoas indicadas: 0\n└ Seu link:\nhttps://t.me/rs_streaming_bot?start=${ctx.from.id}`, Markup.inlineKeyboard([[Markup.button.callback('↩️ Voltar', 'inicio')]]))
 })
 
 bot.action('suporte', async (ctx) => {
