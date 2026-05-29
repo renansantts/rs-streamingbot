@@ -557,10 +557,22 @@ bot.command('saldo', (ctx) => {
 
 bot.hears('👤 Ver Clientes', (ctx) => {
   if (!isAdmin(ctx)) return ctx.reply('❌ Sem permissão.')
+
   const db = loadDB()
   const users = Object.values(db.users)
-  if (!users.length) return ctx.reply('❌ Nenhum cliente cadastrado.')
-  return ctx.reply('👤 CLIENTES:\n\n' + users.map((u, i) => `${i + 1}. ID: ${u.id}\n💰 Saldo: ${money(u.balance || 0)}`).join('\n\n'))
+
+  if (!users.length) {
+    return ctx.reply('❌ Nenhum cliente cadastrado.')
+  }
+
+  return ctx.reply(
+    '👥 CLIENTES:\n\n' +
+    users.map((u, i) => {
+      const nome = u.name || 'Cliente'
+      const arroba = u.username ? `@${u.username}` : 'Sem @'
+      return `${i + 1}. 👤 ${nome} (${arroba})\n🆔 ID: ${u.id}\n💰 Saldo: ${money(u.balance || 0)}`
+    }).join('\n\n')
+  )
 })
 
 bot.hears('🛒 Meus Pedidos / Vendas', (ctx) => {
@@ -589,7 +601,7 @@ bot.command('aviso', async (ctx) => {
   return ctx.reply(`✅ Aviso enviado para ${enviados} cliente(s).`)
 })
 
-bot.hears(/Gift Card/i, (ctx) => isAdmin(ctx) ? ctx.reply('🎁 Para criar Gift Card:\n\n/gift CODIGO VALOR\n\nExemplo:\n/gift RS50 50\n\nCliente resgata com:\n/resgatar RS50') : ctx.reply('❌ Sem permissão.'))
+bot.hears(/Gift Card/i, (ctx) => isAdmin(ctx) ? ctx.reply('🎁 Para criar Gift Card:\n\n/gift CODIGO VALOR\n\nExemplo:\n/gift R$50 50\n\nCliente resgata com:\n/resgatar R$50') : ctx.reply('❌ Sem permissão.'))
 bot.command('gift', (ctx) => {
   if (!isAdmin(ctx)) return ctx.reply('❌ Sem permissão.')
   const db = loadDB()
